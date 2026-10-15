@@ -1,0 +1,30 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "apps/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "GPL-2.0-or-later"
+rust-version = "1.90"
+
+[workspace.dependencies]
+scancraft-model = { path = "crates/scancraft-model", version = "0.1.0" }
+scancraft-scan-core = { path = "crates/scancraft-scan-core", version = "0.1.0" }
+scancraft-scan-mock = { path = "crates/scancraft-scan-mock", version = "0.1.0" }
+scancraft-engine = { path = "crates/scancraft-engine", version = "0.1.0" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+[profile.dev]
+opt-level = 1

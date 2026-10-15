@@ -1,0 +1,12 @@
+[package]
+name = "scancraft-scan-core"
+description = "OS-neutral scanner contract. Backends implement ScannerBackend; engine depends only here."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+scancraft-model = { workspace = true }

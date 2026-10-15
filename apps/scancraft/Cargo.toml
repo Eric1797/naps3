@@ -1,0 +1,16 @@
+[package]
+name = "scancraft"
+description = "ScanCraft desktop app shell (egui GUI lands after the scan core matures)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "scancraft"
+path = "src/main.rs"
+
+[dependencies]
+scancraft-engine = { workspace = true }

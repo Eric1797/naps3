@@ -1,0 +1,13 @@
+[package]
+name = "scancraft-engine"
+description = "ScanCraft session/document store with undo. Frontend entry point."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }

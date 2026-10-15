@@ -1,0 +1,19 @@
+[package]
+name = "scancraft-cli"
+description = "Headless ScanCraft CLI (devices, scan demo). Full tool table later."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "scancraft-cli"
+path = "src/main.rs"
+
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }
+scancraft-scan-mock = { workspace = true }
+scancraft-engine = { workspace = true }
