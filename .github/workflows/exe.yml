@@ -1,0 +1,46 @@
+name: Windows exe
+
+# Release-compile the desktop app + CLI for Windows x64 on every push to
+# main (and on demand) and attach the exes as build artifacts.
+# Installer (MSI) + portable zip + signing land in M8.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+concurrency:
+  group: exe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exe:
+    name: exe (windows x64 release)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --release -p scancraft -p scancraft-cli
+
+      - name: Smoke test (CLI)
+        run: .\target\release\scancraft-cli.exe devices
+
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-exe
+          path: |
+            target/release/*.exe
+            target/debug/*.exe
+            dist/*.exe
+            build/*.exe
+          if-no-files-found: warn
