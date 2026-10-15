@@ -129,7 +129,15 @@ impl OcrEngine for TesseractOcrEngine {
             return Err(ScanError::Io(format!("could not write ocr temp image: {e}")));
         }
 
-        let output = match Command::new(&self.program).arg(&path).arg("stdout").arg("-l").arg(&params.language).output() {
+        let mut command = Command::new(&self.program);
+        command.arg(&path).arg("stdout").arg("-l").arg(&params.language);
+        #[cfg(target_os = "windows")]
+        {
+            // Keep the helper console from flashing over the GUI.
+            use std::os::windows::process::CommandExt as _;
+            command.creation_flags(0x0800_0000);
+        }
+        let output = match command.output() {
             Ok(output) => output,
             Err(e) => {
                 let _ = std::fs::remove_file(&path);

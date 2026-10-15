@@ -203,9 +203,15 @@ impl CraftApp {
         let profiles = store.load().unwrap_or_default();
         let mut engine = Engine::new();
         let doc = engine.create_document();
-        // Default to the real platform backend (WIA on Windows), not the mock,
+        // Default to the real platform backend (TWAIN on 32-bit Windows
+        // where it loads in-process, WIA on 64-bit Windows), not the mock,
         // and list its devices immediately so Scan works on first launch.
-        let backend_idx = if cfg!(target_os = "windows") { BACKENDS.iter().position(|b| *b == "wia").unwrap_or(0) } else { 0 };
+        let backend_idx = if cfg!(target_os = "windows") {
+            let want = if cfg!(target_pointer_width = "32") { "twain" } else { "wia" };
+            BACKENDS.iter().position(|b| *b == want).unwrap_or(0)
+        } else {
+            0
+        };
         let mut app = Self {
             engine,
             doc,
@@ -555,7 +561,7 @@ impl CraftApp {
         ui.heading("ScanCraft");
         ui.separator();
         ui.label("Backend");
-        egui::ComboBox::from_label("").selected_text(self.backend_name()).show_ui(ui, |ui| {
+        egui::ComboBox::from_id_salt("backend").selected_text(self.backend_name()).show_ui(ui, |ui| {
             for (i, name) in BACKENDS.iter().enumerate() {
                 ui.selectable_value(&mut self.backend_idx, i, *name);
             }
@@ -577,27 +583,27 @@ impl CraftApp {
         });
         ui.label("Device");
         let current = self.devices.get(self.device_idx).map(|d| d.display_name.clone()).unwrap_or_else(|| "—".to_owned());
-        egui::ComboBox::from_label("").selected_text(current).show_ui(ui, |ui| {
+        egui::ComboBox::from_id_salt("device").selected_text(current).show_ui(ui, |ui| {
             for (i, device) in self.devices.iter().enumerate() {
                 ui.selectable_value(&mut self.device_idx, i, &device.display_name);
             }
         });
         ui.separator();
         ui.label("Paper source");
-        egui::ComboBox::from_label("").selected_text(source_label(self.source)).show_ui(ui, |ui| {
+        egui::ComboBox::from_id_salt("source").selected_text(source_label(self.source)).show_ui(ui, |ui| {
             ui.selectable_value(&mut self.source, PaperSource::Flatbed, "Flatbed");
             ui.selectable_value(&mut self.source, PaperSource::Feeder, "Feeder");
             ui.selectable_value(&mut self.source, PaperSource::Duplex, "Duplex");
         });
         ui.label("Color mode");
-        egui::ComboBox::from_label("").selected_text(bit_depth_label(self.bit_depth)).show_ui(ui, |ui| {
+        egui::ComboBox::from_id_salt("color").selected_text(bit_depth_label(self.bit_depth)).show_ui(ui, |ui| {
             ui.selectable_value(&mut self.bit_depth, BitDepth::Color, "Color");
             ui.selectable_value(&mut self.bit_depth, BitDepth::Grayscale, "Grayscale");
             ui.selectable_value(&mut self.bit_depth, BitDepth::BlackWhite, "Black & white");
         });
         ui.label("Page size");
         let size_text = page_size_label(self.current_page_size());
-        egui::ComboBox::from_label("").selected_text(size_text).show_ui(ui, |ui| {
+        egui::ComboBox::from_id_salt("pagesize").selected_text(size_text).show_ui(ui, |ui| {
             for (i, size) in PAGE_SIZES.iter().enumerate() {
                 ui.selectable_value(&mut self.page_size_idx, i, page_size_label(*size));
             }
@@ -631,7 +637,7 @@ impl CraftApp {
         let profile_names: Vec<String> = self.profiles.iter().map(|p| p.name.clone()).collect();
         let profile_current = self.profile_idx;
         let selected_name = profile_current.and_then(|i| profile_names.get(i)).cloned().unwrap_or_else(|| "—".to_owned());
-        egui::ComboBox::from_label("").selected_text(selected_name).show_ui(ui, |ui| {
+        egui::ComboBox::from_id_salt("profile").selected_text(selected_name).show_ui(ui, |ui| {
             for (i, name) in profile_names.iter().enumerate() {
                 if ui.selectable_label(profile_current == Some(i), name).clicked() {
                     self.apply_profile(i);

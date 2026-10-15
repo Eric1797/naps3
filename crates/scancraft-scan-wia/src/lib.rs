@@ -224,14 +224,18 @@ fn list_script(progid: &str) -> String {
 
 /// Run `powershell -NoProfile -NonInteractive -Command <script>` and return
 /// stdout. Any failure (spawn, non-zero exit) becomes a capped Driver error.
+/// `CREATE_NO_WINDOW` keeps the helper console from flashing over the GUI.
 #[cfg(windows)]
 fn run_powershell(script: &str, cancel: &CancelToken) -> Result<String, ScanError> {
+    use std::os::windows::process::CommandExt as _;
     cancel.check()?;
+    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
     let output = std::process::Command::new("powershell")
         .arg("-NoProfile")
         .arg("-NonInteractive")
         .arg("-Command")
         .arg(script)
+        .creation_flags(CREATE_NO_WINDOW)
         .output()
         .map_err(|e| ScanError::Driver(cap_msg(&format!("could not start powershell: {e}"))))?;
     cancel.check()?;

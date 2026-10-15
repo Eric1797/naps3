@@ -45,3 +45,35 @@ jobs:
             dist/*.exe
             build/*.exe
           if-no-files-found: warn
+
+  exe-x86:
+    # 32-bit build: TWAIN data sources are ~99% 32-bit DLLs, so only this
+    # build can load them in-process (same reason NAPS2 ships a WinX86
+    # helper). Runs on 64-bit Windows via WOW64.
+    name: exe (windows x86 32-bit release, for TWAIN)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: i686-pc-windows-msvc
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: exe-x86
+
+      - name: Build (32-bit)
+        run: cargo build --release --target i686-pc-windows-msvc -p scancraft -p scancraft-cli
+
+      - name: Smoke test (CLI)
+        run: .\target\i686-pc-windows-msvc\release\scancraft-cli.exe devices
+
+      - name: Upload Windows x86 EXE
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-exe-x86
+          path: |
+            target/i686-pc-windows-msvc/release/*.exe
+          if-no-files-found: warn
