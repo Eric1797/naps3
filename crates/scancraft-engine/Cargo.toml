@@ -9,5 +9,6 @@ license.workspace = true
 workspace = true
 
 [dependencies]
+scancraft-imaging = { workspace = true }
 scancraft-model = { workspace = true }
 scancraft-scan-core = { workspace = true }

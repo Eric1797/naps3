@@ -1,6 +1,6 @@
 [package]
 name = "scancraft"
-description = "ScanCraft desktop app shell (egui GUI lands after the scan core matures)."
+description = "ScanCraft desktop app (egui GUI in the PdfCraft visual language)."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -14,3 +14,16 @@ path = "src/main.rs"
 
 [dependencies]
 scancraft-engine = { workspace = true }
+scancraft-export = { workspace = true }
+scancraft-imaging = { workspace = true }
+scancraft-model = { workspace = true }
+scancraft-profiles = { workspace = true }
+scancraft-scan-core = { workspace = true }
+scancraft-scan-escl = { workspace = true }
+scancraft-scan-mock = { workspace = true }
+scancraft-scan-sane = { workspace = true }
+scancraft-scan-twain = { workspace = true }
+scancraft-scan-wia = { workspace = true }
+egui = { workspace = true }
+eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit", "wayland", "x11", "persistence"] }
+rfd = { workspace = true }

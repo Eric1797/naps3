@@ -19,6 +19,7 @@ pub struct Page {
 enum UndoOp {
     Append { doc: u64, page_id: u64 },
     Remove { doc: u64, index: usize, page: Page },
+    Transform { doc: u64, page_id: u64, prev: RawPage },
 }
 
 /// One open document: ordered pages plus an undo stack.
@@ -59,6 +60,16 @@ impl Document {
         Ok(())
     }
 
+    /// Apply an imaging transform to a page in place (undoable).
+    pub fn transform_page(&mut self, page_id: u64, transform: &scancraft_imaging::Transform) -> Result<(), ScanError> {
+        let index = self.pages.iter().position(|p| p.id == page_id).ok_or_else(|| ScanError::Unsupported("page not found".to_owned()))?;
+        let mut raw = self.pages[index].raw.clone();
+        scancraft_imaging::apply_transform(&mut raw, transform)?;
+        let prev = std::mem::replace(&mut self.pages[index].raw, raw);
+        self.undo.push(UndoOp::Transform { doc: self.id, page_id, prev });
+        Ok(())
+    }
+
     pub fn undo(&mut self) -> bool {
         let op = self.undo.pop();
         match op {
@@ -72,6 +83,12 @@ impl Document {
             Some(UndoOp::Remove { index, page, .. }) => {
                 let at = index.min(self.pages.len());
                 self.pages.insert(at, page);
+                true
+            }
+            Some(UndoOp::Transform { page_id, prev, .. }) => {
+                if let Some(page) = self.pages.iter_mut().find(|p| p.id == page_id) {
+                    page.raw = prev;
+                }
                 true
             }
         }
