@@ -13,8 +13,9 @@ env:
   CARGO_TERM_COLOR: always
 
 concurrency:
+  # Never cancel an in-flight exe build: a cancelled run uploads no artifact.
   group: exe-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   exe:

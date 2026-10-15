@@ -19,9 +19,9 @@
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 
 use scancraft_model::{BitDepth, PageSize, PaperSource};
-use scancraft_scan_core::{CancelToken, Capabilities, DeviceId, PageSink, ScanError, ScanRequest, ScannerBackend};
+use scancraft_scan_core::{CancelToken, Capabilities, DeviceId, DeviceInfo, PageSink, ScanError, ScanRequest, ScannerBackend};
 #[cfg(windows)]
-use scancraft_scan_core::{DeviceInfo, Progress, RawPage};
+use scancraft_scan_core::{Progress, RawPage};
 #[cfg(windows)]
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -145,7 +145,7 @@ impl ScannerBackend for WiaBackend {
         #[cfg(not(windows))]
         {
             // No WIA off Windows.
-            return Ok(Vec::new());
+            Ok(Vec::new())
         }
         #[cfg(windows)]
         {
@@ -171,7 +171,7 @@ impl ScannerBackend for WiaBackend {
         {
             // Keep params referenced so the build stays warning-free on every OS.
             let _ = (request, sink);
-            return Err(ScanError::Unsupported("WIA is Windows-only".to_owned()));
+            Err(ScanError::Unsupported("WIA is Windows-only".to_owned()))
         }
         #[cfg(windows)]
         {
