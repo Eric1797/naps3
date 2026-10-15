@@ -203,11 +203,14 @@ impl CraftApp {
         let profiles = store.load().unwrap_or_default();
         let mut engine = Engine::new();
         let doc = engine.create_document();
-        Self {
+        // Default to the real platform backend (WIA on Windows), not the mock,
+        // and list its devices immediately so Scan works on first launch.
+        let backend_idx = if cfg!(target_os = "windows") { BACKENDS.iter().position(|b| *b == "wia").unwrap_or(0) } else { 0 };
+        let mut app = Self {
             engine,
             doc,
             devices: Vec::new(),
-            backend_idx: 0,
+            backend_idx,
             device_idx: 0,
             dpi_idx: 2,
             source: PaperSource::Flatbed,
@@ -229,7 +232,9 @@ impl CraftApp {
             store,
             escl_host: "192.168.1.10".to_owned(),
             escl_port: "80".to_owned(),
-        }
+        };
+        app.refresh_devices();
+        app
     }
 
     fn backend_name(&self) -> &str {

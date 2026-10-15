@@ -35,3 +35,9 @@ unknown-git = "deny"
 
 [advisories]
 yanked = "warn"
+
+# egui's bundled UI fonts (Ubuntu, Hack, Noto emoji): font licences on the
+# asset allowlist, same exception PdfCraft carries for epaint_default_fonts.
+[[licenses.exceptions]]
+crate = "epaint_default_fonts"
+allow = ["OFL-1.1", "Ubuntu-font-1.0"]
