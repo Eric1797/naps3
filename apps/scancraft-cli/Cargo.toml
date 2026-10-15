@@ -1,6 +1,6 @@
 [package]
 name = "scancraft-cli"
-description = "Headless ScanCraft CLI (devices, scan demo). Full tool table later."
+description = "Headless ScanCraft CLI (devices, profiles, scan + export). Full tool table later."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -16,4 +16,10 @@ path = "src/main.rs"
 scancraft-model = { workspace = true }
 scancraft-scan-core = { workspace = true }
 scancraft-scan-mock = { workspace = true }
+scancraft-scan-wia = { workspace = true }
+scancraft-scan-twain = { workspace = true }
+scancraft-scan-sane = { workspace = true }
+scancraft-scan-escl = { workspace = true }
 scancraft-engine = { workspace = true }
+scancraft-export = { workspace = true }
+scancraft-profiles = { workspace = true }

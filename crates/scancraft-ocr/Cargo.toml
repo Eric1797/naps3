@@ -1,0 +1,12 @@
+[package]
+name = "scancraft-ocr"
+description = "OCR engine trait plus Tesseract subprocess engine for ScanCraft. Ported from NAPS2 OCR vocabulary."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[lints]
+workspace = true
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }
+scancraft-imaging = { workspace = true }

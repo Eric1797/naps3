@@ -1,0 +1,13 @@
+[package]
+name = "scancraft-scan-sane"
+description = "SANE scanner backend for ScanCraft (Linux/macOS stub; libsane milestone pending). Ported from NAPS2 SANE vocabulary."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }

@@ -1,0 +1,15 @@
+[package]
+name = "scancraft-scan-escl"
+description = "eSCL (AirScan/Mopria) scanner backend over plain HTTP. NAPS2 EsclScanDriver port."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }
+scancraft-imaging = { workspace = true }
+quick-xml = { workspace = true }

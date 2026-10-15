@@ -1,0 +1,15 @@
+[package]
+name = "scancraft-profiles"
+description = "Persisted scan profiles store (JSON file). NAPS2 ScanProfile port."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

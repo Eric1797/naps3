@@ -1,0 +1,12 @@
+[package]
+name = "scancraft-export"
+description = "PDF/TIFF/BMP/JPEG/PNG exporters for ScanCraft (pure Rust). Ported from NAPS2 export vocabulary."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[lints]
+workspace = true
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }
+scancraft-imaging = { workspace = true }

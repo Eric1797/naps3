@@ -1,0 +1,12 @@
+[package]
+name = "scancraft-imaging"
+description = "Pixel transforms and codecs for ScanCraft (pure Rust). Ported from NAPS2 imaging vocabulary."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[lints]
+workspace = true
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }
+image = { workspace = true }

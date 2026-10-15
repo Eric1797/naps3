@@ -1,0 +1,13 @@
+[package]
+name = "scancraft-scan-twain"
+description = "TWAIN scanner backend for ScanCraft (DSM probe; 64-bit helper notes). Ported from NAPS2 TWAIN vocabulary."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+scancraft-model = { workspace = true }
+scancraft-scan-core = { workspace = true }

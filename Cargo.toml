@@ -13,6 +13,21 @@ scancraft-model = { path = "crates/scancraft-model", version = "0.1.0" }
 scancraft-scan-core = { path = "crates/scancraft-scan-core", version = "0.1.0" }
 scancraft-scan-mock = { path = "crates/scancraft-scan-mock", version = "0.1.0" }
 scancraft-engine = { path = "crates/scancraft-engine", version = "0.1.0" }
+scancraft-imaging = { path = "crates/scancraft-imaging", version = "0.1.0" }
+scancraft-export = { path = "crates/scancraft-export", version = "0.1.0" }
+scancraft-ocr = { path = "crates/scancraft-ocr", version = "0.1.0" }
+scancraft-profiles = { path = "crates/scancraft-profiles", version = "0.1.0" }
+scancraft-scan-wia = { path = "crates/scancraft-scan-wia", version = "0.1.0" }
+scancraft-scan-twain = { path = "crates/scancraft-scan-twain", version = "0.1.0" }
+scancraft-scan-sane = { path = "crates/scancraft-scan-sane", version = "0.1.0" }
+scancraft-scan-escl = { path = "crates/scancraft-scan-escl", version = "0.1.0" }
+
+# Pure-Rust codecs (no C deps): BMP/JPEG/PNG via `image`.
+image = { version = "0.25", default-features = false, features = ["bmp", "jpeg", "png"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+quick-xml = "0.41"
+libloading = "0.8"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

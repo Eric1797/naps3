@@ -8,13 +8,14 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
 /// Driver used for the actual scan. Availability depends on the platform.
 ///
 /// Mirrors `NAPS2.Sdk/Scan/Driver.cs`: Windows defaults to WIA,
 /// macOS to Apple, Linux to SANE; eSCL works everywhere.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum Driver {
     /// Platform default (WIA on Windows, Apple on macOS, SANE on Linux).
     #[default]
@@ -80,7 +81,7 @@ impl fmt::Display for Driver {
 }
 
 /// Physical paper source. Mirrors `NAPS2.Sdk/Scan/PaperSource.cs`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum PaperSource {
     Auto,
     #[default]
@@ -91,7 +92,7 @@ pub enum PaperSource {
 
 /// Profile-level source names. Mirrors `ScanSource` in `ScanProfile.cs`
 /// (`Glass`/`Feeder`/`Duplex`) and maps onto [`PaperSource`].
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum ScanSource {
     #[default]
     Glass,
@@ -111,7 +112,7 @@ impl ScanSource {
 
 /// Bit depth of a scanned page. Mirrors `ScanBitDepth`/`BitDepth` in NAPS2
 /// (`C24Bit` profile name, `Color` driver name).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum BitDepth {
     #[default]
     Color,
@@ -120,7 +121,7 @@ pub enum BitDepth {
 }
 
 /// Front or back side of a duplex sheet.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum PageSide {
     #[default]
     Front,
@@ -129,7 +130,7 @@ pub enum PageSide {
 
 /// Horizontal placement of the page inside a larger scan area.
 /// NAPS2 default is `Right`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 pub enum HorizontalAlign {
     Left,
     Center,
@@ -139,7 +140,7 @@ pub enum HorizontalAlign {
 
 /// Standard page sizes plus custom (millimetres).
 /// Dimensions mirror the `PageDimensions` attributes on `ScanPageSize`.
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
 pub enum PageSize {
     A4,
     #[default]
@@ -197,7 +198,7 @@ impl PageSize {
 ///
 /// `id` semantics depend on the driver: WIA device id, TWAIN identity,
 /// SANE `backend:name`, eSCL UUID or `http(s)://` URI, Apple UUID.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ScanDevice {
     pub driver: Driver,
     pub id: String,
@@ -214,7 +215,7 @@ impl ScanDevice {
 /// User-persisted scan configuration. Mirrors `NAPS2.Lib/Scan/ScanProfile.cs`
 /// defaults: 24-bit color, right align, Letter, 200 DPI, flatbed glass,
 /// JPEG quality 75, blank thresholds 70/15.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScanProfile {
     pub display_name: String,
     pub driver: Driver,
@@ -284,7 +285,7 @@ impl ScanProfile {
 
 /// Per-scan driver options. Mirrors `NAPS2.Sdk/Scan/ScanOptions.cs`
 /// (JPEG quality 75, blank thresholds 70/15, scale ratio 1).
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScanOptions {
     pub driver: Driver,
     pub device: Option<ScanDevice>,
